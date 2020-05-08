@@ -39,17 +39,8 @@ module.exports = (env: WebpackEnvironment, argv: { mode: string }) => {
     module: {
       rules: [
         {
-          test: /\.css$/i,
-          exclude: /node_modules/,
-          use: [
-            'style-loader',
-            {
-              loader: 'css-loader',
-              options: {
-                modules: true,
-              },
-            },
-          ],
+          test: /\.s[ac]ss$/i,
+          use: ['style-loader', 'css-loader', 'sass-loader'],
         },
         {
           test: /\.tsx?$/,

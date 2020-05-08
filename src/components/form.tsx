@@ -1,6 +1,6 @@
 import { Component, h } from 'preact';
 import { ProfileRequestCreation } from './models';
-import '../style.css';
+import './style.scss';
 
 interface RequestFormState {
   yo: string;
@@ -55,25 +55,36 @@ export default class RequestForm extends Component<
 
     return (
       <form onSubmit={null} action="javascript:onSubmit()">
-        <label>First name</label>
-        <input type="text"></input>
-
-        <label>Last name</label>
-        <input type="text"></input>
-
-        <label>Address (Street &#38; Number)</label>
-        <input type="text"></input>
-
-        <label>Email</label>
-        <input type="text"></input>
-
-        <label>Phone number</label>
-        <select>
-          <option>1</option>
-          <option>2</option>
-        </select>
-        <input type="text"></input>
-
+        <div class="row">
+          <div class="field">
+            <label>First name</label>
+            <input type="text"></input>
+          </div>
+          <div class="field">
+            <label>Last name</label>
+            <input type="text"></input>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>Address (Street &#38; Number)</label>
+            <input type="text"></input>
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input type="text"></input>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>Phone number</label>
+            <select>
+              <option>1</option>
+              <option>2</option>
+            </select>
+            <input type="text"></input>
+          </div>
+        </div>
         <button type="submit">Send a request</button>
       </form>
     );
