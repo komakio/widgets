@@ -1,6 +1,7 @@
 import { Component, h } from 'preact';
 import { ProfileRequestCreation } from './models';
 import './style.scss';
+import { createRequest } from '../api/profile';
 
 interface RequestFormState {
   yo: string;
@@ -18,7 +19,7 @@ export default class RequestForm extends Component<
     const onSubmit = async (data) => {
       //   setLoading(true);
       try {
-        const body: ProfileRequestCreation = {
+        const profile: ProfileRequestCreation = {
           firstName: data.firstName,
           lastName: data.lastName,
           email: data.email,
@@ -35,20 +36,8 @@ export default class RequestForm extends Component<
           phone: { number: data.phone, dialCode: data.dialCode },
         };
 
-        const response = await fetch('url//blablalba', {
-          method: 'POST', // *GET, POST, PUT, DELETE, etc.
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(body), // body data type must match "Content-Type" header
-        });
-
-        return response.json();
-        // setLoading(false);
-        // setSuccess(true);
+        const response = await createRequest(profile);
       } catch (e) {
-        // setLoading(false);
-        // setError(true);
         throw e;
       }
     };
