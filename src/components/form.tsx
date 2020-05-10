@@ -3,6 +3,7 @@ import { ProfileRequestCreation } from './models';
 import './style.scss';
 import { createRequest } from '../api/profile';
 import { COUNTRIES } from '../utils/countries';
+import { autoComplete, GeolocationResult } from '../api/location';
 
 interface RequestFormState {
   firstName: string;
@@ -11,8 +12,9 @@ interface RequestFormState {
   email: string;
   dialCode: string;
   phone: string;
-  longitude: string;
-  latitude: string;
+  longitude: number;
+  latitude: number;
+  autoCompletes: GeolocationResult[];
 }
 
 interface RequestFormProps {
@@ -32,14 +34,15 @@ export default class RequestForm extends Component<
       email: '',
       dialCode: '',
       phone: '',
-      longitude: '',
-      latitude: '',
+      longitude: 0,
+      latitude: 0,
+      autoCompletes: [],
     };
   }
 
   public onSubmit = async (event) => {
     //   setLoading(true);
-    event.preventDefault();
+    event.preventDefaultautoCompleteResult();
 
     try {
       const profile: ProfileRequestCreation = {
@@ -49,10 +52,7 @@ export default class RequestForm extends Component<
         address: {
           location: {
             type: 'Point',
-            coordinates: [
-              parseFloat(this.state.longitude as any),
-              parseFloat(this.state.latitude as any),
-            ],
+            coordinates: [this.state.longitude, this.state.latitude],
           },
           raw: this.state.address,
         },
@@ -67,13 +67,26 @@ export default class RequestForm extends Component<
     }
   };
 
-  public onAddressChange = () => {
-    console.log(1);
+  public onAddressChange = async (text: string) => {
+    // const nodeRef = useOnClickOutside(() => setOpen(false));
+    // const [value] = useDebounce(text, 500);
+    const res = await autoComplete(text);
+    // this.setState({ longitude: res.longitude });
+    // this.setState({ latitude: res.latitude });
+    this.setState({ autoCompletes: res });
   };
 
   public render(
-    { color },
-    { firstName, lastName, address, email, dialCode, phone }
+    { color }: RequestFormProps,
+    {
+      firstName,
+      lastName,
+      address,
+      email,
+      dialCode,
+      phone,
+      autoCompletes,
+    }: RequestFormState
   ) {
     return (
       <form onSubmit={this.onSubmit}>
@@ -107,9 +120,14 @@ export default class RequestForm extends Component<
               value={address}
               onChange={(e: any) => {
                 this.setState({ address: e.target.value });
-                this.onAddressChange();
+                this.onAddressChange(e.target.value);
               }}
             />
+            <select>
+              {autoCompletes.map((c) => (
+                <option>{`${c.label}`}</option>
+              ))}
+            </select>
           </div>
           <div class="field">
             <label>Email</label>
