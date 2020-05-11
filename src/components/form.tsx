@@ -1,4 +1,4 @@
-import { Component, h } from 'preact';
+import { Component, h, createRef } from 'preact';
 import { ProfileRequestCreation } from './models';
 import './style.scss';
 import { createRequest } from '../api/profile';
@@ -25,8 +25,10 @@ export default class RequestForm extends Component<
   RequestFormProps,
   RequestFormState
 > {
-  constructor(props) {
+  private addressRef;
+  constructor(props: RequestFormProps) {
     super(props);
+    this.addressRef = createRef();
     this.state = {
       firstName: '',
       lastName: '',
@@ -76,6 +78,28 @@ export default class RequestForm extends Component<
     this.setState({ autoCompletes: res });
   };
 
+  public componentDidMount = () => {
+    document.addEventListener('click', (e: any) => {
+      console.log({
+        target: e.target,
+        ref: this.addressRef.current,
+      });
+      if (e.target === this.addressRef.current) {
+        console.log('hi');
+      }
+      console.log('bye');
+    });
+  };
+
+  public componentWillUnmount = () => {
+    document.removeEventListener('click', (e: any) => {
+      if (e.target === this.addressRef.current) {
+        console.log('hi');
+      }
+      console.log('bye');
+    });
+  };
+
   public render(
     { color }: RequestFormProps,
     {
@@ -96,7 +120,7 @@ export default class RequestForm extends Component<
             <input
               type="text"
               value={firstName}
-              onChange={(e: any) => {
+              onInput={(e: any) => {
                 this.setState({ firstName: e.target.value });
               }}
             />
@@ -106,35 +130,35 @@ export default class RequestForm extends Component<
             <input
               type="text"
               value={lastName}
-              onChange={(e: any) => {
+              onInput={(e: any) => {
                 this.setState({ lastName: e.target.value });
               }}
             />
           </div>
         </div>
-        <div class="row">
+        <div class="row address">
           <div class="field">
             <label>Address (Street &#38; Number)</label>
             <input
               type="text"
               value={address}
-              onChange={(e: any) => {
+              onInput={(e: any) => {
                 this.setState({ address: e.target.value });
                 this.onAddressChange(e.target.value);
               }}
             />
-            <select>
+            <div class="address-options" ref={this.addressRef}>
               {autoCompletes.map((c) => (
-                <option>{`${c.label}`}</option>
+                <div>{`${c.label}`}</div>
               ))}
-            </select>
+            </div>
           </div>
           <div class="field">
             <label>Email</label>
             <input
               type="text"
               value={email}
-              onChange={(e: any) => {
+              onInput={(e: any) => {
                 this.setState({ email: e.target.value });
               }}
             />

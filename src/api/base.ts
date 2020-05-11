@@ -8,16 +8,15 @@ export const callApi = async (
 ) => {
   console.log({ method, path, body });
 
-  const res = await axios.post(`${Environment.backendUrl}${path}`, body);
-  return res.data;
-  // const res = await fetch(`${Environment.backendUrl}${path}`, {
-  //   method,
-  //   mode: 'no-cors',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  //   body: JSON.stringify(body),
-  // });
+  // const res = await axios.post(`${Environment.backendUrl}${path}`, body);
+  // return res.data;
+  const res = await fetch(`${Environment.backendUrl}${path}`, {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
 
-  // return res.json();
+  return res.json();
 };

@@ -11,3 +11,13 @@ form {
 .field label {
     display: block;
 }
+
+.address {
+    position: relative;
+}
+
+.address-options {
+    position: absolute;
+    background-color: grey;
+    cursor: pointer;
+}
