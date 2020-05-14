@@ -1,0 +1,16 @@
+label {
+    display: block;
+}
+
+input {
+  height: 30px;
+  outline-color: "${Colors.dark}";
+}
+
+.wrapper {
+  margin-bottom: 15px;
+  margin-right: 20px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}

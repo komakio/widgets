@@ -1,9 +1,11 @@
 import { Component, h, createRef } from 'preact';
 import { ProfileRequestCreation } from './models';
-import './style.scss';
 import { createRequest } from '../api/profile';
 import { COUNTRIES } from '../utils/countries';
 import { autoComplete, GeolocationResult } from '../api/location';
+import './style.scss';
+import { Input } from './shared/input';
+import { Dropdown } from './shared/dropdown';
 
 interface RequestFormState {
   firstName: string;
@@ -61,18 +63,14 @@ export default class RequestForm extends Component<
       };
 
       const response = await createRequest(profile);
-      console.log({ response });
     } catch (e) {
       throw e;
     }
   };
 
   public onAddressChange = async (text: string) => {
-    // const nodeRef = useOnClickOutside(() => setOpen(false));
-    // const [value] = useDebounce(text, 500);
+    //todo: add debounce
     const res = await autoComplete(text);
-    // this.setState({ longitude: res.longitude });
-    // this.setState({ latitude: res.latitude });
     this.setState({ autoCompletes: res });
   };
 
@@ -80,6 +78,11 @@ export default class RequestForm extends Component<
     if (!e.path.includes(this.addressRef.current)) {
       this.setState({ autoCompletes: [] });
     }
+  };
+
+  public onAddressSelection = (address: GeolocationResult) => () => {
+    this.setState({ longitude: address.longitude });
+    this.setState({ latitude: address.latitude });
   };
 
   public componentDidMount = () => {
@@ -97,7 +100,6 @@ export default class RequestForm extends Component<
       lastName,
       address,
       email,
-      dialCode,
       phone,
       autoCompletes,
     }: RequestFormState
@@ -106,9 +108,8 @@ export default class RequestForm extends Component<
       <form onSubmit={this.onSubmit}>
         <div class="row">
           <div class="field">
-            <label>First name</label>
-            <input
-              type="text"
+            <Input
+              label="First name"
               value={firstName}
               onInput={(e: any) => {
                 this.setState({ firstName: e.target.value });
@@ -116,9 +117,8 @@ export default class RequestForm extends Component<
             />
           </div>
           <div class="field">
-            <label>Last name</label>
-            <input
-              type="text"
+            <Input
+              label="Last name"
               value={lastName}
               onInput={(e: any) => {
                 this.setState({ lastName: e.target.value });
@@ -128,9 +128,8 @@ export default class RequestForm extends Component<
         </div>
         <div class="row address">
           <div class="field">
-            <label>Address (Street &#38; Number)</label>
-            <input
-              type="text"
+            <Input
+              label="Address (Street &#38; Number)"
               value={address}
               onInput={(e: any) => {
                 this.setState({ address: e.target.value });
@@ -138,15 +137,15 @@ export default class RequestForm extends Component<
               }}
             />
             <ul class="address-options" ref={this.addressRef}>
-              {autoCompletes.map((c) => (
-                <li>{`${c.label}`}</li>
+              {autoCompletes.map((a) => (
+                <li onClick={this.onAddressSelection(a)}>{`${a.label}`}</li>
               ))}
             </ul>
           </div>
           <div class="field">
-            <label>Email</label>
-            <input
+            <Input
               type="email"
+              label="Email"
               value={email}
               onInput={(e: any) => {
                 this.setState({ email: e.target.value });
@@ -156,13 +155,21 @@ export default class RequestForm extends Component<
         </div>
         <div class="row">
           <div class="field">
-            <label>Phone number</label>
-            <select>
-              {COUNTRIES.map((c) => (
-                <option>{`${c.name} (${c.dialCode})`}</option>
-              ))}
-            </select>
-            <input type="text" value={phone} />
+            <Dropdown
+              label="Phone number"
+              placeholder="Select country code"
+              options={COUNTRIES.map((c) => ({
+                value: c.dialCode,
+                label: `${c.name} (${c.dialCode})`,
+              }))}
+              onChange={(e: any) => this.setState({ dialCode: e.target.value })}
+            />
+            <Input
+              value={phone}
+              onInput={(e: any) => {
+                this.setState({ phone: e.target.value });
+              }}
+            />
           </div>
         </div>
         <button type="submit">Send a request</button>
