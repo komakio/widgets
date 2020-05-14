@@ -6,6 +6,7 @@ import { autoComplete, GeolocationResult } from '../api/location';
 import './style.scss';
 import { Input } from './shared/input';
 import { Dropdown } from './shared/dropdown';
+import { Button } from './shared/button';
 
 interface RequestFormState {
   firstName: string;
@@ -62,7 +63,7 @@ export default class RequestForm extends Component<
         phone: { number: this.state.dialCode, dialCode: this.state.phone },
       };
 
-      const response = await createRequest(profile);
+      await createRequest(profile);
     } catch (e) {
       throw e;
     }
@@ -172,7 +173,7 @@ export default class RequestForm extends Component<
             />
           </div>
         </div>
-        <button type="submit">Send a request</button>
+        <Button isSubmit>Send a request</Button>
       </form>
     );
   }
