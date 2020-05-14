@@ -3,10 +3,10 @@ import { ProfileRequestCreation } from './models';
 import { createRequest } from '../api/profile';
 import { COUNTRIES } from '../utils/countries';
 import { autoComplete, GeolocationResult } from '../api/location';
-import './style.scss';
 import { Input } from './shared/input';
 import { Dropdown } from './shared/dropdown';
 import { Button } from './shared/button';
+import './style.scss';
 
 interface RequestFormState {
   firstName: string;

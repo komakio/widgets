@@ -21,7 +21,6 @@ export const authenticate = async () => {
 const getCached = () => {
   const authorization = localStorage.getItem('authorization');
   const expiration = localStorage.getItem('expiration');
-  console.log({ authorization, expiration });
 
   if (authorization && expiration && Date.now() <= Number(expiration)) {
     return authorization;
