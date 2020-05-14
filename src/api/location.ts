@@ -1,4 +1,5 @@
 import { callApi } from './base';
+import { authenticate } from './auth';
 
 export interface GeolocationResult {
   label: string;
@@ -11,17 +12,18 @@ export const autoComplete = async (
   text: string
 ): Promise<GeolocationResult[]> => {
   try {
-    return new Promise((res) =>
-      res([
-        { label: 'Ewaldsensvey 12', longitude: 0, latitude: 0, layer: 'kir' },
-        { label: 'Masjed 12', longitude: 0, latitude: 0, layer: 'kir' },
-      ])
+    const authorization = await authenticate();
+
+    const res = await callApi(
+      'POST',
+      '/v1/geocoder/autocomplete',
+      {
+        text,
+        size: 5,
+      },
+      { authorization }
     );
-    // const res = await callApi('POST', '/v1/geocoder/autocomplete', {
-    //   text,
-    //   size: 5,
-    // });
-    // return res.results;
+    return res.results;
   } catch (e) {
     console.log(e);
   }

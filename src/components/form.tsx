@@ -43,8 +43,7 @@ export default class RequestForm extends Component<
   }
 
   public onSubmit = async (event) => {
-    //   setLoading(true);
-    event.preventDefaultautoCompleteResult();
+    event.preventDefault();
 
     try {
       const profile: ProfileRequestCreation = {
@@ -62,7 +61,6 @@ export default class RequestForm extends Component<
       };
 
       const response = await createRequest(profile);
-
       console.log({ response });
     } catch (e) {
       throw e;
@@ -78,26 +76,18 @@ export default class RequestForm extends Component<
     this.setState({ autoCompletes: res });
   };
 
+  public clickOutsideHandler = (e: any) => {
+    if (!e.path.includes(this.addressRef.current)) {
+      this.setState({ autoCompletes: [] });
+    }
+  };
+
   public componentDidMount = () => {
-    document.addEventListener('click', (e: any) => {
-      console.log({
-        target: e.target,
-        ref: this.addressRef.current,
-      });
-      if (e.target === this.addressRef.current) {
-        console.log('hi');
-      }
-      console.log('bye');
-    });
+    document.addEventListener('click', this.clickOutsideHandler);
   };
 
   public componentWillUnmount = () => {
-    document.removeEventListener('click', (e: any) => {
-      if (e.target === this.addressRef.current) {
-        console.log('hi');
-      }
-      console.log('bye');
-    });
+    document.removeEventListener('click', this.clickOutsideHandler);
   };
 
   public render(
@@ -147,16 +137,16 @@ export default class RequestForm extends Component<
                 this.onAddressChange(e.target.value);
               }}
             />
-            <div class="address-options" ref={this.addressRef}>
+            <ul class="address-options" ref={this.addressRef}>
               {autoCompletes.map((c) => (
-                <div>{`${c.label}`}</div>
+                <li>{`${c.label}`}</li>
               ))}
-            </div>
+            </ul>
           </div>
           <div class="field">
             <label>Email</label>
             <input
-              type="text"
+              type="email"
               value={email}
               onInput={(e: any) => {
                 this.setState({ email: e.target.value });

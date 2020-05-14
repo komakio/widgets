@@ -1,19 +1,16 @@
 import { Environment } from '../environment';
-import axios from 'axios';
 
 export const callApi = async (
   method: 'POST' | 'GET' | 'DELETE' | 'PUT' | 'PATCH',
   path: string,
-  body: object
+  body: object,
+  headers?: object
 ) => {
-  console.log({ method, path, body });
-
-  // const res = await axios.post(`${Environment.backendUrl}${path}`, body);
-  // return res.data;
   const res = await fetch(`${Environment.backendUrl}${path}`, {
     method,
     headers: {
       'Content-Type': 'application/json',
+      ...headers,
     },
     body: JSON.stringify(body),
   });

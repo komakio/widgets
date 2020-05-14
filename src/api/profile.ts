@@ -1,4 +1,5 @@
 import { callApi } from './base';
+import { authenticate } from './auth';
 
 interface Location {
   type: 'Point';
@@ -27,5 +28,7 @@ export interface ProfileRequestCreation {
   email: string;
 }
 
-export const createRequest = (profile: ProfileRequestCreation) =>
-  callApi('POST', '/v1/requests/webform', profile);
+export const createRequest = async (profile: ProfileRequestCreation) => {
+  const authorization = await authenticate();
+  return callApi('POST', '/v1/requests/webform', profile, { authorization });
+};
