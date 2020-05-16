@@ -1,7 +1,4 @@
 import { render, h } from 'preact';
-import TodoList from './components/todo-list';
+import { RequestForm } from './components/form';
 
-render(
-  <TodoList />,
-  document.querySelector('#root')
-);
+render(<RequestForm color="red" />, document.querySelector('#root'));

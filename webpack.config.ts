@@ -11,66 +11,60 @@ interface WebpackEnvironment {
 }
 
 module.exports = (env: WebpackEnvironment, argv: { mode: string }) => {
-  const appEntryPoints = argv.mode === 'production'
-  ? ['./index']
-  : [
-      `webpack-dev-server/client?http://localhost:${port}`,
-      'webpack/hot/only-dev-server',
-      './index'
-    ];
+  const appEntryPoints =
+    argv.mode === 'production'
+      ? ['./index']
+      : [
+          `webpack-dev-server/client?http://localhost:${port}`,
+          'webpack/hot/only-dev-server',
+          './index',
+        ];
 
   const config: webpack.Configuration = {
     name: 'client',
     target: 'web',
     context,
     entry: {
-      app: appEntryPoints
+      app: appEntryPoints,
     },
     output: {
       filename: '[name].js',
-      path: resolve(__dirname, 'dist')
+      path: resolve(__dirname, 'dist'),
     },
     resolve: {
-      extensions: ['.ts', '.tsx', '.js', 'jsx']
+      extensions: ['.ts', '.tsx', '.js', 'jsx'],
     },
-    devtool: argv.mode === 'production' ? 'source-map' : 'cheap-eval-source-map',
+    devtool:
+      argv.mode === 'production' ? 'source-map' : 'cheap-eval-source-map',
     module: {
       rules: [
         {
-          enforce: 'pre',
-          test: /\.tsx?$/,
-          loader: 'tslint-loader',
-          exclude: /node_modules/,
-          options: {
-            configFile: resolve(__dirname, './tslint.json'),
-            emitErrors: true,
-            failOnHint: true,
-            typeCheck: true
-          }
+          test: /\.s[ac]ss$/i,
+          use: ['style-loader', 'css-loader', 'sass-loader'],
         },
         {
           test: /\.tsx?$/,
           loader: 'ts-loader',
-          exclude: /node_modules/
-        }
-      ]
+          exclude: /node_modules/,
+        },
+      ],
     },
     plugins: [
       new HtmlWebpackPlugin({
         template: './index.html',
         hash: true,
         filename: 'index.html',
-        inject: 'body'
+        inject: 'body',
       }),
-      new HotModuleReplacementPlugin()
-    ]
+      new HotModuleReplacementPlugin(),
+    ],
   };
 
   if (argv.mode === 'development') {
     config.devServer = {
       contentBase: join(__dirname, 'dist'),
-        compress: true,
-        port: 9000
+      compress: true,
+      port: 9000,
     };
   }
 
