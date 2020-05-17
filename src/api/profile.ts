@@ -28,7 +28,10 @@ export interface ProfileRequestCreation {
   email: string;
 }
 
-export const createRequest = async (profile: ProfileRequestCreation) => {
-  const authorization = await authenticate();
+export const createRequest = async (
+  profile: ProfileRequestCreation,
+  captcha: string
+) => {
+  const authorization = await authenticate(captcha);
   return callApi('POST', '/v1/requests/webform', profile, { authorization });
 };

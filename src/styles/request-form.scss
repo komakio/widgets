@@ -1,0 +1,12 @@
+.request-form {
+    display: flex;
+    flex-direction: column;
+    
+    &__row {
+        display: flex;
+    }
+    
+    &__field label {
+        display: block;
+    }
+}

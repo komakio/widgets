@@ -9,10 +9,11 @@ export interface GeolocationResult {
 }
 
 export const autoComplete = async (
-  text: string
+  text: string,
+  captcha: string
 ): Promise<GeolocationResult[]> => {
   try {
-    const authorization = await authenticate();
+    const authorization = await authenticate(captcha);
 
     const res = await callApi(
       'POST',

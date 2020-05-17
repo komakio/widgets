@@ -1,5 +1,4 @@
 import { h } from 'preact';
-import './input-style.scss';
 
 interface InputProps {
   label?: string;
@@ -17,7 +16,7 @@ export const Input = ({
   type = 'text',
 }: InputProps) => {
   return (
-    <div className="wrapper">
+    <div class="input">
       {label && <label>{label}</label>}
       <input onInput={onInput} value={value} required={required} type={type} />
     </div>
