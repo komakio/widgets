@@ -1,0 +1,17 @@
+.phone-input {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 20px;
+    &__dash {
+        margin: 0 3px;
+        padding-bottom: 10px;
+    }
+
+    .input {
+        margin: 0;
+    }
+
+    select {
+        width: 180px;
+    }
+}

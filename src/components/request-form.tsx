@@ -19,17 +19,15 @@ export const RequestForm = (props: RequestFormProps) => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [captchaLoader, setCaptchaLoader] = useState<ReCaptchaInstance>(null);
-
-  const address = {
+  const [address, setAddress] = useState({
     raw: '',
     longitude: 0,
     latitude: 0,
-  };
-
-  const phone = {
+  });
+  const [phone, setPhone] = useState<ProfileRequestCreation['phone']>({
     dialCode: '',
     number: '',
-  };
+  });
 
   const onSubmit = useCallback(
     async (event: any) => {
@@ -50,30 +48,22 @@ export const RequestForm = (props: RequestFormProps) => {
           phone,
         };
 
+        console.log({profile});
+        
         const captcha = await captchaLoader.execute('requestHelp');
         await createRequest(profile, captcha);
       } catch (e) {
         throw e;
       }
     },
-    [firstName, lastName, email, address, phone]
-  );
-
-  const onAddressSelection = useCallback(
-    (args: { address: string; longitude: number; latitude: number }) => () => {
-      address.raw = args.address;
-      address.longitude = args.longitude;
-      address.latitude = args.latitude;
-    },
-    [location]
-  );
-
-  const onPhoneChange = useCallback(
-    (args: { number: string; dialCode: string }) => {
-      phone.number = args.number;
-      phone.dialCode = args.dialCode;
-    },
-    [phone]
+    [
+      firstName,
+      lastName,
+      email,
+      address,
+      phone,
+      captchaLoader,
+    ]
   );
 
   useAsyncEffect(async (isActive) => {
@@ -81,7 +71,6 @@ export const RequestForm = (props: RequestFormProps) => {
     if (!isActive()) {
       return;
     }
-
     setCaptchaLoader(loader);
   });
 
@@ -95,6 +84,7 @@ export const RequestForm = (props: RequestFormProps) => {
             onInput={(e: any) => {
               setFirstName(e.target.value);
             }}
+            required
           />
         </div>
         <div class="request-form__field">
@@ -104,14 +94,16 @@ export const RequestForm = (props: RequestFormProps) => {
             onInput={(e: any) => {
               setLastName(e.target.value);
             }}
+            required
           />
         </div>
       </div>
       <div class="request-form__row">
         <div class="request-form__field">
           <AutoCompleteAddress
-            onSelect={onAddressSelection}
+            onSelect={setAddress}
             captchaLoader={captchaLoader}
+            required
           />
         </div>
         <div class="request-form__field">
@@ -122,12 +114,13 @@ export const RequestForm = (props: RequestFormProps) => {
             onInput={(e: any) => {
               setEmail(e.target.value);
             }}
+            required
           />
         </div>
       </div>
       <div class="request-form__row">
         <div class="request-form__field">
-          <PhoneInput onChange={onPhoneChange} required />
+          <PhoneInput onChange={setPhone} required />
         </div>
       </div>
       <div class="request-form__row">

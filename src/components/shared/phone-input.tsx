@@ -28,9 +28,12 @@ export const PhoneInput = ({ onChange, required }: PhoneInputProps) => {
           onChange({ dialCode: e.target.value, phone });
         }}
       />
+      <div class="phone-input__dash"> ⁠— </div>
       <Input
         value={phone}
         onInput={(e: any) => {
+          console.log(e.target.value);
+          
           setPhone(e.target.value);
           onChange({ dialCode, phone: e.target.value });
         }}
