@@ -7,9 +7,17 @@
 
   label {
     display: block;
+    margin-bottom: 5px;
   }
 
   input {
     height: 30px;
+    font-size: 16px;
+    background-color: rgb(247, 245, 245);
+    border: solid 1px rgb(190, 190, 190);
+
+    &:focus {
+      outline: rgb(0, 168, 107) solid 2px;
+    }
   }
 }

@@ -60,7 +60,7 @@ export const AutoCompleteAddress = ({
   return (
     <div class="autocomplete-address">
       <Input
-        label="Address (Street &#38; Number)"
+        label="Address"
         value={text}
         required={required}
         onInput={(e: any) => {

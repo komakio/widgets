@@ -8,8 +8,9 @@ import { load, ReCaptchaInstance } from 'recaptcha-v3';
 import { useAsyncEffect } from '../utils/hooks';
 import { AutoCompleteAddress } from './shared/autocomplete-address';
 import { PhoneInput } from './shared/phone-input';
-import '../styles/index.scss';
 import { Environment } from '../environment';
+import '../styles/index.scss';
+import { Checkbox } from './shared/checkbox';
 
 interface RequestFormProps {
   color: string;
@@ -20,6 +21,9 @@ export const RequestForm = (props: RequestFormProps) => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [captchaLoader, setCaptchaLoader] = useState<ReCaptchaInstance>(null);
+  const [tickTerms, setTickTerms] = useState(false);
+  const [tickPolicy, setTickPolicy] = useState(false);
+  const [tickConsent, setTickConsent] = useState(false);
   const [address, setAddress] = useState({
     raw: '',
     longitude: 0,
@@ -48,22 +52,27 @@ export const RequestForm = (props: RequestFormProps) => {
           },
           phone,
         };
-        
+
         const captcha = await captchaLoader.execute('requestHelp');
         await createRequest(profile, captcha);
+        reset();
       } catch (e) {
         throw e;
       }
     },
-    [
-      firstName,
-      lastName,
-      email,
-      address,
-      phone,
-      captchaLoader,
-    ]
+    [firstName, lastName, email, address, phone, captchaLoader]
   );
+
+  const reset = useCallback(() => {
+    setFirstName('');
+    setLastName('');
+    setEmail('');
+    setAddress(null);
+    setPhone(null);
+    setTickTerms(false);
+    setTickPolicy(false);
+    setTickConsent(false);
+  }, []);
 
   useAsyncEffect(async (isActive) => {
     const loader = await load(Environment.recaptchaSiteKey);
@@ -75,6 +84,10 @@ export const RequestForm = (props: RequestFormProps) => {
 
   return (
     <form onSubmit={onSubmit} class="request-form">
+      <div class="request-form__title">
+        FILL IN THE QUESTIONNAIRE BELOW AND WE’LL SEND YOUR REQUEST TO
+        VOLUNTEERS NEAR YOU!
+      </div>
       <div class="request-form__row">
         <div class="request-form__field">
           <Input
@@ -120,6 +133,44 @@ export const RequestForm = (props: RequestFormProps) => {
       <div class="request-form__row">
         <div class="request-form__field">
           <PhoneInput onChange={setPhone} required />
+        </div>
+      </div>
+      <div class="request-form__row">
+        <div class="request-form__field">
+          <Checkbox
+            required
+            isChecked={tickTerms}
+            onChange={() => setTickTerms(!tickTerms)}
+            label={
+              <div>
+                I have read and agree with the{' '}
+                <a href="https://komak.io/terms-of-service">
+                  terms of service of Komak.io
+                </a>
+              </div>
+            }
+          />
+          <Checkbox
+            required
+            isChecked={tickPolicy}
+            label={
+              <div>
+                I understand and consent to the collection and use of my
+                personal information, including my Health Data, as described in
+                the <a href="https://komak.io/privacy">Privacy Policy</a>
+              </div>
+            }
+          />
+          <Checkbox
+            required
+            isChecked={tickConsent}
+            label={
+              <div>
+                I agree with the processing of my email address by Komak for the
+                purpose of establishing communication with their user volunteers
+              </div>
+            }
+          />
         </div>
       </div>
       <div class="request-form__row">
