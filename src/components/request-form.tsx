@@ -9,6 +9,7 @@ import { useAsyncEffect } from '../utils/hooks';
 import { AutoCompleteAddress } from './shared/autocomplete-address';
 import { PhoneInput } from './shared/phone-input';
 import '../styles/index.scss';
+import { Environment } from '../environment';
 
 interface RequestFormProps {
   color: string;
@@ -47,8 +48,6 @@ export const RequestForm = (props: RequestFormProps) => {
           },
           phone,
         };
-
-        console.log({profile});
         
         const captcha = await captchaLoader.execute('requestHelp');
         await createRequest(profile, captcha);
@@ -67,7 +66,7 @@ export const RequestForm = (props: RequestFormProps) => {
   );
 
   useAsyncEffect(async (isActive) => {
-    const loader = await load('6Lc2ReUUAAAAAM-UBGGFTLOELBlVRme90hR-F1AM');
+    const loader = await load(Environment.recaptchaSiteKey);
     if (!isActive()) {
       return;
     }

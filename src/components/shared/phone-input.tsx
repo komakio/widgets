@@ -11,7 +11,7 @@ interface PhoneInputProps {
 
 export const PhoneInput = ({ onChange, required }: PhoneInputProps) => {
   const [dialCode, setDialCode] = useState('');
-  const [phone, setPhone] = useState('');
+  const [number, setNumber] = useState('');
 
   return (
     <div class="phone-input">
@@ -25,17 +25,15 @@ export const PhoneInput = ({ onChange, required }: PhoneInputProps) => {
         required={required}
         onChange={(e: any) => {
           setDialCode(e.target.value);
-          onChange({ dialCode: e.target.value, phone });
+          onChange({ dialCode: e.target.value, number });
         }}
       />
       <div class="phone-input__dash"> ⁠— </div>
       <Input
-        value={phone}
-        onInput={(e: any) => {
-          console.log(e.target.value);
-          
-          setPhone(e.target.value);
-          onChange({ dialCode, phone: e.target.value });
+        value={number}
+        onInput={(e: any) => {          
+          setNumber(e.target.value);
+          onChange({ dialCode, number: e.target.value });
         }}
         required={required}
       />

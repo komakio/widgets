@@ -15,33 +15,47 @@ export const AutoCompleteAddress = ({
   captchaLoader,
   required,
 }: AutoCompleteAddressProps) => {
-  const addressRef = useRef();
+  const addressRef = useRef<HTMLUListElement>();
   const [text, setText] = useState('');
   const [autoCompletes, setAutoCompletes] = useState<GeolocationResult[]>([]);
+  const timeout = useRef();
 
   const onAddressChange = useCallback(
     async (text: string) => {
-      //todo: add debounce
-      if (!text.trim()) {
+      setText(text);
+
+      if (timeout.current) {
         return;
       }
-      const captcha = await captchaLoader.execute('address');
-      const res = await autoComplete(text, captcha);
-      setAutoCompletes(res);
+
+      if (!text.trim()) {
+        setAutoCompletes([]);
+        return;
+      }
+
+      timeout.current = setTimeout(async () => {
+        const captcha = await captchaLoader.execute('address');
+        const res = await autoComplete(text, captcha);
+        timeout.current = null;
+        setAutoCompletes(res);
+      }, 500);
     },
-    [setAutoCompletes, captchaLoader]
+    [setAutoCompletes, captchaLoader, timeout]
   );
 
-  const clickOutsideHandler = useCallback((e: any) => {
-    if (!e.path.includes(addressRef.current)) {
-      setAutoCompletes([]);
-    }
-  }, []);
-
   useEffect(() => {
+    const clickOutsideHandler = (e: any) => {
+      if (!e.path.includes(addressRef.current)) {
+        setAutoCompletes([]);
+      }
+    };
+
     document.addEventListener('click', clickOutsideHandler);
-    return document.removeEventListener('click', clickOutsideHandler);
-  }, [clickOutsideHandler]);
+    return () => {
+      document.removeEventListener('click', clickOutsideHandler);
+      clearTimeout(timeout.current as NodeJS.Timeout);
+    };
+  }, [addressRef, timeout]);
 
   return (
     <div class="autocomplete-address">
@@ -53,7 +67,7 @@ export const AutoCompleteAddress = ({
           onAddressChange(e.target.value);
         }}
       />
-      <ul ref={addressRef.current}>
+      <ul ref={addressRef}>
         {autoCompletes.map((a) => (
           <li
             onClick={() => {
