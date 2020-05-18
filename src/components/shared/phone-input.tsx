@@ -2,17 +2,17 @@ import { h } from 'preact';
 import { Dropdown } from './dropdown';
 import { COUNTRIES } from '../../utils/countries';
 import { Input } from './input';
-import { useState } from 'preact/hooks';
 
 interface PhoneInputProps {
   onChange: (...args: any[]) => void;
   required?: boolean;
+  phone: {
+    dialCode: string;
+    number: string;
+  };
 }
 
-export const PhoneInput = ({ onChange, required }: PhoneInputProps) => {
-  const [dialCode, setDialCode] = useState('');
-  const [number, setNumber] = useState('');
-
+export const PhoneInput = ({ onChange, phone, required }: PhoneInputProps) => {
   return (
     <div class="phone-input">
       <Dropdown
@@ -22,18 +22,17 @@ export const PhoneInput = ({ onChange, required }: PhoneInputProps) => {
           value: c.dialCode,
           label: `${c.name} (${c.dialCode})`,
         }))}
+        selected={phone?.dialCode}
         required={required}
         onChange={(e: any) => {
-          setDialCode(e.target.value);
-          onChange({ dialCode: e.target.value, number });
+          onChange({ dialCode: e.target.value, number: phone.number });
         }}
       />
       <div class="phone-input__dash"> ⁠— </div>
       <Input
-        value={number}
-        onInput={(e: any) => {          
-          setNumber(e.target.value);
-          onChange({ dialCode, number: e.target.value });
+        value={phone?.number || ''}
+        onInput={(e: any) => {
+          onChange({ dialCode: phone.dialCode, number: e.target.value });
         }}
         required={required}
       />

@@ -13,7 +13,7 @@ interface WebpackEnvironment {
 module.exports = (env: WebpackEnvironment, argv: { mode: string }) => {
   const appEntryPoints =
     argv.mode === 'production'
-      ? ['./index']
+      ? ['./widget']
       : [
           `webpack-dev-server/client?http://localhost:${port}`,
           'webpack/hot/only-dev-server',
@@ -26,6 +26,7 @@ module.exports = (env: WebpackEnvironment, argv: { mode: string }) => {
     context,
     entry: {
       app: appEntryPoints,
+      widget: './widget',
     },
     output: {
       filename: '[name].js',

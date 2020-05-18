@@ -24,6 +24,7 @@ export const RequestForm = (props: RequestFormProps) => {
   const [tickTerms, setTickTerms] = useState(false);
   const [tickPolicy, setTickPolicy] = useState(false);
   const [tickConsent, setTickConsent] = useState(false);
+  const [addressText, setAddressText] = useState('');
   const [address, setAddress] = useState({
     raw: '',
     longitude: 0,
@@ -55,24 +56,22 @@ export const RequestForm = (props: RequestFormProps) => {
 
         const captcha = await captchaLoader.execute('requestHelp');
         await createRequest(profile, captcha);
-        reset();
+
+        setFirstName('');
+        setLastName('');
+        setEmail('');
+        setAddressText('');
+        setAddress(null);
+        setPhone(null);
+        setTickTerms(false);
+        setTickPolicy(false);
+        setTickConsent(false);
       } catch (e) {
         throw e;
       }
     },
     [firstName, lastName, email, address, phone, captchaLoader]
   );
-
-  const reset = useCallback(() => {
-    setFirstName('');
-    setLastName('');
-    setEmail('');
-    setAddress(null);
-    setPhone(null);
-    setTickTerms(false);
-    setTickPolicy(false);
-    setTickConsent(false);
-  }, []);
 
   useAsyncEffect(async (isActive) => {
     const loader = await load(Environment.recaptchaSiteKey);
@@ -114,6 +113,8 @@ export const RequestForm = (props: RequestFormProps) => {
         <div class="request-form__field">
           <AutoCompleteAddress
             onSelect={setAddress}
+            onInput={setAddressText}
+            addressText={addressText}
             captchaLoader={captchaLoader}
             required
           />
@@ -132,7 +133,7 @@ export const RequestForm = (props: RequestFormProps) => {
       </div>
       <div class="request-form__row">
         <div class="request-form__field">
-          <PhoneInput onChange={setPhone} required />
+          <PhoneInput onChange={setPhone} phone={phone} required />
         </div>
       </div>
       <div class="request-form__row">
@@ -153,6 +154,7 @@ export const RequestForm = (props: RequestFormProps) => {
           <Checkbox
             required
             isChecked={tickPolicy}
+            onChange={() => setTickPolicy(!tickPolicy)}
             label={
               <div>
                 I understand and consent to the collection and use of my
@@ -164,6 +166,7 @@ export const RequestForm = (props: RequestFormProps) => {
           <Checkbox
             required
             isChecked={tickConsent}
+            onChange={() => setTickConsent(!tickConsent)}
             label={
               <div>
                 I agree with the processing of my email address by Komak for the

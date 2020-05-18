@@ -22,6 +22,6 @@ interface Address {
 }
 
 interface Phone {
-  dialCode?: string;
+  dialCode: string;
   number: string;
 }

@@ -4,6 +4,7 @@ interface InputProps {
   label: string;
   placeholder: string;
   options: { value: string; label: string }[];
+  selected: string;
   required?: boolean;
   onChange: (e: any) => void;
 }
@@ -14,11 +15,17 @@ export const Dropdown = ({
   options,
   placeholder,
   required,
+  selected,
 }: InputProps) => {
   return (
     <div class="dropdown">
       <label>{label}</label>
-      <select onChange={onChange} placeholder={placeholder} required={required}>
+      <select
+        onChange={onChange}
+        placeholder={placeholder}
+        required={required}
+        value={selected || ''}
+      >
         <option value="" selected disabled>
           Select your country
         </option>
