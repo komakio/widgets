@@ -10,7 +10,7 @@ export class Environment {
     ? 'production'
     : 'staging';
 
-  public static recaptchaKey =
+  public static recaptchaSiteKey =
     Environment.env === 'production'
       ? '6Lez3eYUAAAAACx_bWV_X3D6K16O1y4uan-km5K6'
       : '6Lc2ReUUAAAAAM-UBGGFTLOELBlVRme90hR-F1AM';

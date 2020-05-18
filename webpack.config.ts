@@ -29,6 +29,7 @@ module.exports = (env: WebpackEnvironment, argv: { mode: string }) => {
     },
     output: {
       filename: '[name].js',
+      libraryTarget: 'umd',
       path: resolve(__dirname, 'dist'),
     },
     resolve: {

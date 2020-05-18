@@ -1,10 +1,10 @@
 import { h } from 'preact';
-import './dropdown-style.scss';
 
 interface InputProps {
   label: string;
   placeholder: string;
   options: { value: string; label: string }[];
+  required?: boolean;
   onChange: (e: any) => void;
 }
 
@@ -13,11 +13,12 @@ export const Dropdown = ({
   label,
   options,
   placeholder,
+  required,
 }: InputProps) => {
   return (
-    <div className="wrapper">
+    <div class="dropdown">
       <label>{label}</label>
-      <select onChange={onChange} placeholder={placeholder}>
+      <select onChange={onChange} placeholder={placeholder} required={required}>
         <option value="" selected disabled>
           Select your country
         </option>

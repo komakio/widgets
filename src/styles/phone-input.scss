@@ -1,0 +1,18 @@
+.phone-input {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 20px;
+    &__dash {
+        margin: 0 3px;
+        padding-bottom: 10px;
+    }
+
+    .input {
+        margin: 0;
+    }
+
+    select {
+        width: 201px;
+        background-color: rgb(247, 245, 245);
+    }
+}

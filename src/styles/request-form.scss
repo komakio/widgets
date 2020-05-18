@@ -1,0 +1,28 @@
+.request-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 430px;
+    font-family: Sen, sans-serif;
+    padding: 40px;
+    line-height: 1.35;
+
+    &__title {
+        margin-bottom: 15px;
+    }
+    
+    &__row {
+        display: flex;
+
+        &:last-child {
+            justify-content: center;
+        }
+    }
+    
+    label {
+        display: block;
+    }
+
+    a, a:visited, a:hover {
+        color: rgb(0, 168, 107);
+    }
+}

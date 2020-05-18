@@ -1,5 +1,4 @@
 import { h } from 'preact';
-import './button-style.scss';
 
 interface ButtonProps {
   isSubmit: boolean;
@@ -9,7 +8,11 @@ interface ButtonProps {
 
 export const Button = ({ onClick, isSubmit, children }: ButtonProps) => {
   return (
-    <button onClick={onClick} type={isSubmit ? 'submit' : 'button'}>
+    <button
+      class="button"
+      onClick={onClick}
+      type={isSubmit ? 'submit' : 'button'}
+    >
       {children}
     </button>
   );

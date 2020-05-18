@@ -1,0 +1,19 @@
+.autocomplete-address {
+    position: relative;
+    
+    ul {
+        position: absolute;
+        background-color: rgb(247, 245, 245);
+        cursor: pointer;
+        box-shadow: 8px 8px 19px grey;
+        list-style: none;
+        padding: 0;
+        margin:  -15px 0 0;
+        min-width: 180px
+    }
+    
+    li {
+        padding: 10px;
+        border-bottom: thin solid black;
+    }
+}
