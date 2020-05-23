@@ -49,7 +49,6 @@
     "webpack-dev-server": "3.10.2"
   },
   "dependencies": {
-    "cypress": "^4.5.0",
     "preact": "10.4.1",
     "preact-habitat": "3.3.0",
     "recaptcha-v3": "1.8.0",
