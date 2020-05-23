@@ -6,24 +6,25 @@ import { ReCaptchaInstance } from 'recaptcha-v3';
 
 interface AutoCompleteAddressProps {
   onSelect: (...args: any) => void;
+  onInput: (text: string) => void;
   captchaLoader: ReCaptchaInstance;
   required?: boolean;
+  addressText: string;
 }
 
 export const AutoCompleteAddress = ({
   onSelect,
+  onInput,
   captchaLoader,
+  addressText,
   required,
 }: AutoCompleteAddressProps) => {
   const addressRef = useRef<HTMLUListElement>();
-  const [text, setText] = useState('');
   const [autoCompletes, setAutoCompletes] = useState<GeolocationResult[]>([]);
   const timeout = useRef();
 
   const onAddressChange = useCallback(
     async (text: string) => {
-      setText(text);
-
       if (timeout.current) {
         return;
       }
@@ -61,9 +62,10 @@ export const AutoCompleteAddress = ({
     <div class="autocomplete-address">
       <Input
         label="Address"
-        value={text}
+        value={addressText}
         required={required}
         onInput={(e: any) => {
+          onInput(addressText);
           onAddressChange(e.target.value);
         }}
       />
@@ -76,7 +78,7 @@ export const AutoCompleteAddress = ({
                 longitude: a.longitude,
                 latitude: a.latitude,
               });
-              setText(a.label);
+              onInput(a.label);
               setAutoCompletes([]);
             }}
           >{`${a.label}`}</li>

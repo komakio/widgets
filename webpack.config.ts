@@ -26,6 +26,7 @@ module.exports = (env: WebpackEnvironment, argv: { mode: string }) => {
     context,
     entry: {
       app: appEntryPoints,
+      widget: './widget',
     },
     output: {
       filename: '[name].js',

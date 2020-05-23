@@ -47,6 +47,3 @@ jspm_packages
 .yarn-integrity
 
 dist/
-
-cypress/screenshots/
-cypress/videos/
